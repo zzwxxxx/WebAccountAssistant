@@ -4,6 +4,7 @@
 
 This repository contains a built Chrome Extension for "账号管理助手". Key entry points:
 
+- `.my/ai/plans/`: AI-generated implementation plans and design notes. When planning work before implementation, write the plan files here.
 - `manifest.json`: Manifest V3 configuration, permissions, action popup, background worker, and content scripts.
 - `background.js`: Service worker for install-time initialization and `GET_APP_CONFIG` / `SAVE_APP_CONFIG` message handling.
 - `content.js` and `page-guard.js`: Page-level scripts injected into matching sites.
