@@ -1069,7 +1069,83 @@ const en = 1600, Ue = [{key: "groups", label: "项目分组", icon: "icons/menu/
 
 function sn(n) {
     var t;
+    if (n === "changelog") return "更新日志";
     return ((t = Ue.find(i => i.key === n)) == null ? void 0 : t.label) ?? ""
+}
+
+function WAAgetVersion() {
+    var n, t, i;
+    const a = ((i = (t = (n = chrome.runtime) == null ? void 0 : n.getManifest) == null ? void 0 : t.call(n)) == null ? void 0 : i.version) ?? "0.1.0";
+    return `v${a}`
+}
+
+function WAAparseChangeLog(n) {
+    const t = [];
+    let i = null, a = null;
+    for (const o of n.split(/\r?\n/)) {
+        const h = o.trim();
+        if (!h || h.startsWith("# ChangeLog")) continue;
+        const u = h.match(/^##\s+(.+?)(?:\s+-\s+(.+))?$/);
+        if (u) {
+            i = {version: u[1].trim(), tag: (u[2] ?? "").trim(), sections: []}, t.push(i), a = null;
+            continue
+        }
+        const d = h.match(/^###\s+(.+)$/);
+        if (d && i) {
+            a = {title: d[1].trim(), items: []}, i.sections.push(a);
+            continue
+        }
+        const j = h.match(/^[-*]\s+(.+)$/);
+        j && a && a.items.push(j[1].trim())
+    }
+    return t
+}
+
+function WAAChangelogPanel() {
+    const [n, t] = p.useState({loading: !0, versions: [], error: ""});
+    return p.useEffect(() => {
+        let i = !0;
+        fetch(chrome.runtime.getURL("ChangeLog.md")).then(a => {
+            if (!a.ok) throw new Error("读取 ChangeLog.md 失败");
+            return a.text()
+        }).then(a => {
+            i && t({loading: !1, versions: WAAparseChangeLog(a), error: ""})
+        }).catch(a => {
+            i && t({loading: !1, versions: [], error: a.message})
+        });
+        return () => {
+            i = !1
+        }
+    }, []), n.loading ? e.jsx("div", {
+        className: "wm-card",
+        children: e.jsx("div", {className: "wm-card__bd", children: "正在加载更新日志"})
+    }) : n.error ? e.jsx("div", {
+        className: "wm-card",
+        children: e.jsx("div", {className: "wm-card__bd wm-status", children: n.error})
+    }) : e.jsx("div", {
+        className: "wm-changelog-panel",
+        children: n.versions.length ? n.versions.map(i => e.jsxs("section", {
+            className: "wm-card wm-version-card",
+            children: [e.jsxs("div", {
+                className: "wm-card__hd",
+                children: [e.jsx("strong", {children: i.version}), i.tag ? e.jsx("span", {
+                    className: "wm-badge",
+                    children: i.tag
+                }) : null]
+            }), e.jsx("div", {
+                className: "wm-card__bd wm-version-body",
+                children: i.sections.map(a => e.jsxs("article", {
+                    className: "wm-change-list",
+                    children: [e.jsx("h3", {children: a.title}), a.items.length ? e.jsx("ul", {
+                        children: a.items.map((o, h) => e.jsx("li", {children: o}, `${a.title}-${h}`))
+                    }) : e.jsx("div", {className: "wm-tiny", children: "暂无内容"})]
+                }, `${i.version}-${a.title}`))
+            })]
+        }, i.version)) : e.jsx("div", {
+            className: "wm-card",
+            children: e.jsx("div", {className: "wm-card__bd wm-status", children: "ChangeLog.md 暂无版本内容"})
+        })
+    })
 }
 
 function nn() {
@@ -1230,6 +1306,11 @@ function mn() {
             var l;
             t(s), re(Ie(s)), x(((l = s.projects[0]) == null ? void 0 : l.id) ?? ""), w(""), F(""), R(""), h(fe(s).errors), a("配置已加载")
         }).catch(s => WAAshowInlineError(s.message))
+    }, []), p.useEffect(() => {
+        const s = () => {
+            window.location.hash === "#changelog" && d("changelog")
+        };
+        return s(), window.addEventListener("hashchange", s), () => window.removeEventListener("hashchange", s)
     }, []), p.useEffect(() => () => {
         q.current !== null && window.clearTimeout(q.current)
     }, []), p.useEffect(() => {
@@ -1572,6 +1653,31 @@ function mn() {
                             }), e.jsx("span", {className: "wm-menu-tooltip", role: "tooltip", children: l})]
                         }, s))
                     })
+                }), e.jsxs("div", {
+                    className: "wm-global-footer",
+                    children: [e.jsx("span", {
+                        className: "wm-global-version",
+                        children: WAAgetVersion()
+                    }), e.jsx("button", {
+                        className: "wm-global-link",
+                        type: "button",
+                        onClick: () => {
+                            window.location.hash = "changelog", d("changelog")
+                        },
+                        children: "更新日志"
+                    }), e.jsx("button", {
+                        className: "wm-global-github",
+                        type: "button",
+                        title: "GitHub",
+                        "aria-label": "GitHub",
+                        onClick: () => chrome.tabs.create({url: "https://github.com/zzwxxxx/WebAccountAssistant"}),
+                        children: e.jsx("svg", {
+                            className: "wm-global-github__icon",
+                            viewBox: "0 0 24 24",
+                            "aria-hidden": "true",
+                            children: e.jsx("path", {d: "M12 2.2A9.8 9.8 0 0 0 8.9 21.3c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1 1.6 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.3 9.3 0 0 1 4.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.6 4.9.4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5A9.8 9.8 0 0 0 12 2.2Z"})
+                        })
+                    })]
                 })]
             }), e.jsxs("main", {
                 className: "wm-panel",
@@ -2240,7 +2346,7 @@ function mn() {
                                 }) : null]
                             })]
                         })
-                    }) : null]
+                    }) : null, u === "changelog" ? e.jsx(WAAChangelogPanel, {}) : null]
                 })]
             })]
         }), e.jsx(Qs, {

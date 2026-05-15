@@ -809,3 +809,143 @@ button, input, textarea, select {
     border-radius: 6px;
     background: #f8fafc
 }
+
+.wm-shell {
+    width: 100%;
+    overflow: hidden
+}
+
+.wm-sidebar {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden
+}
+
+.wm-sidebar .wm-panel__bd {
+    overflow-x: hidden;
+    overflow-y: auto
+}
+
+.wm-shell--collapsed .wm-sidebar {
+    overflow: visible
+}
+
+.wm-shell--collapsed .wm-sidebar .wm-panel__bd {
+    overflow: visible
+}
+
+.wm-sidebar .wm-panel__bd {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0
+}
+
+.wm-global-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    border-top: 1px solid var(--line);
+    background: #fbfcfe
+}
+
+.wm-global-version {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1
+}
+
+.wm-global-link, .wm-global-github {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color .15s ease, background .15s ease
+}
+
+.wm-global-link {
+    padding: 5px 7px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap
+}
+
+.wm-global-github {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border-radius: 999px;
+    flex: 0 0 26px
+}
+
+.wm-global-link:hover, .wm-global-github:hover {
+    background: #eef4ff;
+    color: var(--accent)
+}
+
+.wm-global-github__icon {
+    display: block;
+    width: 18px;
+    height: 18px;
+    fill: currentColor
+}
+
+.wm-shell--collapsed .wm-global-footer {
+    padding: 8px 4px
+}
+
+.wm-shell--collapsed .wm-global-version, .wm-shell--collapsed .wm-global-link {
+    display: none
+}
+
+.wm-changelog-panel {
+    display: grid;
+    gap: 12px
+}
+
+.wm-version-card .wm-card__hd {
+    justify-content: flex-start
+}
+
+.wm-version-body {
+    display: grid;
+    grid-template-columns:repeat(2, minmax(0, 1fr));
+    gap: 12px
+}
+
+.wm-change-list {
+    padding: 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fbfcfe
+}
+
+.wm-change-list h3 {
+    margin: 0 0 8px;
+    font-size: 14px
+}
+
+.wm-change-list ul {
+    margin: 0;
+    padding-left: 18px;
+    color: var(--text);
+    line-height: 1.7
+}
+
+.wm-change-list li + li {
+    margin-top: 4px
+}
+
+@media (max-width: 860px) {
+    .wm-version-body {
+        grid-template-columns:1fr
+    }
+}

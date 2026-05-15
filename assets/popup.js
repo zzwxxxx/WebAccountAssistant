@@ -266,6 +266,14 @@ function F() {
         chrome.tabs.create({url: chrome.runtime.getURL("extension.html")}), window.close()
     }
 
+    function V() {
+        chrome.tabs.create({url: `${chrome.runtime.getURL("extension.html")}#changelog`}), window.close()
+    }
+
+    function K() {
+        chrome.tabs.create({url: "https://github.com/zzwxxxx/WebAccountAssistant"}), window.close()
+    }
+
     async function v(l) {
         if (a != null && a.id) {
             x("");
@@ -383,10 +391,30 @@ function F() {
                 children: w
             }) : null, e.jsx("div", {
                 className: "wm-popup__footer",
-                children: e.jsx("div", {
+                children: e.jsxs("div", {
                     className: "wm-popup__links",
                     "aria-label": "辅助链接",
-                    children: "帮助｜更新日志｜反馈｜关于"
+                    children: [e.jsx("span", {
+                        className: "wm-popup__version",
+                        children: P()
+                    }), e.jsx("button", {
+                        className: "wm-popup__link",
+                        type: "button",
+                        onClick: V,
+                        children: "更新日志"
+                    }), e.jsx("button", {
+                        className: "wm-popup__github",
+                        type: "button",
+                        "aria-label": "GitHub",
+                        title: "GitHub",
+                        onClick: K,
+                        children: e.jsx("svg", {
+                            className: "wm-popup__github-icon",
+                            viewBox: "0 0 24 24",
+                            "aria-hidden": "true",
+                            children: e.jsx("path", {d: "M12 2.2A9.8 9.8 0 0 0 8.9 21.3c.5.1.7-.2.7-.5v-1.8c-2.8.6-3.4-1.2-3.4-1.2-.5-1.1-1.1-1.4-1.1-1.4-.9-.6.1-.6.1-.6 1 0 1.6 1 1.6 1 .9 1.5 2.4 1.1 2.9.8.1-.6.4-1.1.7-1.3-2.2-.3-4.6-1.1-4.6-4.9 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.3 9.3 0 0 1 4.9 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.8-2.3 4.6-4.6 4.9.4.3.7.9.7 1.8v2.7c0 .3.2.6.7.5A9.8 9.8 0 0 0 12 2.2Z"})
+                        })
+                    })]
                 })
             })]
         })

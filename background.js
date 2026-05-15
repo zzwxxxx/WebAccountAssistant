@@ -17,7 +17,6 @@ import {
     unwrapPrivateKey
 } from "./assets/vault.js";
 
-const ENABLED_KEY = "extensionEnabled";
 const SENSITIVE_UNLOCK_KEY = "waaSensitiveUnlockUntil";
 const SENSITIVE_UNLOCK_WINDOW_MS = 60 * 1000;
 const AUTOFILL_KEY_DB = "waaAutofillKeys";
@@ -81,13 +80,6 @@ function matchEnvironment(config, urlInfo) {
     }
 
     return null;
-}
-
-async function isEnabled() {
-    const storage = chrome.storage?.local;
-    if (!storage) return true;
-    const data = await storage.get(ENABLED_KEY);
-    return data[ENABLED_KEY] !== false;
 }
 
 function getSessionStorage() {
@@ -364,12 +356,6 @@ async function setToolbarIcon(tabId, matched) {
 
 async function updateTabIcon(tab) {
     if (!tab?.id) return;
-    const enabled = await isEnabled();
-    if (!enabled) {
-        await setToolbarIcon(tab.id, false);
-        return;
-    }
-
     const config = await readConfig();
     const matched = !!matchEnvironment(config, parseUrl(tab.url));
     await setToolbarIcon(tab.id, matched);
@@ -401,7 +387,7 @@ chrome.tabs.onUpdated?.addListener((tabId, changeInfo, tab) => {
 });
 
 chrome.storage?.onChanged?.addListener((changes, areaName) => {
-    if (areaName === "local" && (changes.appConfig || changes[ENABLED_KEY])) {
+    if (areaName === "local" && changes.appConfig) {
         updateActiveTabIcon().catch(console.error);
     }
 });
