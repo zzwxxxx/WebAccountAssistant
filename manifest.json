@@ -25,6 +25,12 @@
   },
   "permissions": ["storage", "tabs", "activeTab", "scripting", "clipboardWrite"],
   "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/security-gate.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

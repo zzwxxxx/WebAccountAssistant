@@ -1,1 +1,47 @@
-"use strict";(()=>{function d(){return/\/login(?:\/|$)/i.test(window.location.pathname)}function a(t){let n=t?.AES;if(!n?.decrypt)return!1;if(n.decrypt.__webAccountAssistantPatched)return!0;let r=n.decrypt,i=function(e,...u){if(e==null)return t.lib.WordArray.create();try{return r.call(this,e,...u)}catch(o){if(o instanceof TypeError&&String(o.message).includes("ciphertext"))return t.lib.WordArray.create();throw o}};return i.__webAccountAssistantPatched=!0,n.decrypt=i,!0}function c(){let t=Date.now(),n=window.setInterval(()=>{(a(window.CryptoJS)||Date.now()-t>5e3)&&window.clearInterval(n)},10)}function s(){if(!d())return;let t=window.CryptoJS;if(t){if(a(t))return;c()}let n=t;Object.defineProperty(window,"CryptoJS",{configurable:!0,get(){return n},set(r){n=r,a(r)||c()}})}s();})();
+"use strict";
+(() => {
+    function d() {
+        return /\/login(?:\/|$)/i.test(window.location.pathname)
+    }
+
+    function a(t) {
+        let n = t?.AES;
+        if (!n?.decrypt) return !1;
+        if (n.decrypt.__webAccountAssistantPatched) return !0;
+        let r = n.decrypt, i = function (e, ...u) {
+            if (e == null) return t.lib.WordArray.create();
+            try {
+                return r.call(this, e, ...u)
+            } catch (o) {
+                if (o instanceof TypeError && String(o.message).includes("ciphertext")) return t.lib.WordArray.create();
+                throw o
+            }
+        };
+        return i.__webAccountAssistantPatched = !0, n.decrypt = i, !0
+    }
+
+    function c() {
+        let t = Date.now(), n = window.setInterval(() => {
+            (a(window.CryptoJS) || Date.now() - t > 5e3) && window.clearInterval(n)
+        }, 10)
+    }
+
+    function s() {
+        if (!d()) return;
+        let t = window.CryptoJS;
+        if (t) {
+            if (a(t)) return;
+            c()
+        }
+        let n = t;
+        Object.defineProperty(window, "CryptoJS", {
+            configurable: !0, get() {
+                return n
+            }, set(r) {
+                n = r, a(r) || c()
+            }
+        })
+    }
+
+    s();
+})();
