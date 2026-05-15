@@ -270,6 +270,10 @@ function F() {
         chrome.tabs.create({url: `${chrome.runtime.getURL("extension.html")}#changelog`}), window.close()
     }
 
+    function Q() {
+        chrome.tabs.create({url: chrome.runtime.getURL("install.html")}), window.close()
+    }
+
     function K() {
         chrome.tabs.create({url: "https://github.com/zzwxxxx/WebAccountAssistant"}), window.close()
     }
@@ -394,8 +398,11 @@ function F() {
                 children: e.jsxs("div", {
                     className: "wm-popup__links",
                     "aria-label": "辅助链接",
-                    children: [e.jsx("span", {
+                    children: [e.jsx("button", {
                         className: "wm-popup__version",
+                        type: "button",
+                        title: "安装教程",
+                        onClick: Q,
                         children: P()
                     }), e.jsx("button", {
                         className: "wm-popup__link",

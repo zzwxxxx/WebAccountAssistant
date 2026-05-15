@@ -641,7 +641,16 @@ button {
 }
 
 .wm-popup__version {
+    border: 0;
+    padding: 0;
     color: #5d6b82;
+    background: transparent;
     font-size: 12px;
-    line-height: 1
+    line-height: 1;
+    cursor: pointer
+}
+
+.wm-popup__version:hover {
+    color: #1450a3;
+    text-decoration: underline
 }

@@ -1,0 +1,178 @@
+:root {
+    color-scheme: light;
+    --text: #18243a;
+    --muted: #65738a;
+    --line: #dce3ed;
+    --surface: #ffffff;
+    --page: #f5f7fb;
+    --primary: #1f6feb;
+    --primary-hover: #1559c8;
+    --code-bg: #f0f4f9
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--page)
+}
+
+.wm-install {
+    width: min(920px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 28px 0 48px
+}
+
+.wm-install__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px
+}
+
+.wm-install__eyebrow {
+    margin: 0 0 6px;
+    color: var(--muted);
+    font-size: 13px
+}
+
+.wm-install__header h1 {
+    margin: 0;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 750;
+    letter-spacing: 0
+}
+
+.wm-install__back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 0 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--primary);
+    background: var(--surface);
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap
+}
+
+.wm-install__back:hover {
+    border-color: #b8c9e6;
+    color: var(--primary-hover)
+}
+
+.wm-install__content {
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    box-shadow: 0 10px 28px rgba(23, 34, 55, .08)
+}
+
+.wm-install__content h1 {
+    margin: 0 0 18px;
+    font-size: 26px;
+    line-height: 1.25;
+    letter-spacing: 0
+}
+
+.wm-install__content h2 {
+    margin: 30px 0 12px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 20px;
+    line-height: 1.35;
+    letter-spacing: 0
+}
+
+.wm-install__content h3 {
+    margin: 22px 0 10px;
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: 0
+}
+
+.wm-install__content p {
+    margin: 10px 0;
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.75
+}
+
+.wm-install__content ul,
+.wm-install__content ol {
+    margin: 10px 0 18px;
+    padding-left: 24px
+}
+
+.wm-install__content li {
+    margin: 7px 0;
+    font-size: 15px;
+    line-height: 1.7
+}
+
+.wm-install__content pre {
+    overflow: auto;
+    margin: 12px 0 18px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--code-bg);
+    font-size: 13px;
+    line-height: 1.55
+}
+
+.wm-install__content code {
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: var(--code-bg);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: .92em
+}
+
+.wm-install__content pre code {
+    padding: 0;
+    border-radius: 0;
+    background: transparent
+}
+
+.wm-install__content blockquote {
+    margin: 14px 0;
+    padding: 10px 14px;
+    border-left: 3px solid var(--primary);
+    background: #f7fbff;
+    color: var(--muted)
+}
+
+.wm-install__content a {
+    color: var(--primary)
+}
+
+@media (max-width: 640px) {
+    .wm-install {
+        width: min(100% - 20px, 920px);
+        padding: 16px 0 28px
+    }
+
+    .wm-install__header {
+        align-items: flex-start;
+        flex-direction: column
+    }
+
+    .wm-install__header h1 {
+        font-size: 25px
+    }
+
+    .wm-install__content {
+        padding: 18px
+    }
+}

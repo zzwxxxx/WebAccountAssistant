@@ -40,9 +40,11 @@ jobs:
             popup.html \
             extension.html \
             auth.html \
+            install.html \
             assets \
             icons \
             README.md \
+            INSTALL.md \
             ChangeLog.md \
             LICENSE
 

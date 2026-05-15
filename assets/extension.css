@@ -855,9 +855,13 @@ button, input, textarea, select {
     display: inline-flex;
     align-items: center;
     min-width: 0;
+    border: 0;
+    padding: 0;
     color: var(--muted);
+    background: transparent;
     font-size: 12px;
-    line-height: 1
+    line-height: 1;
+    cursor: pointer
 }
 
 .wm-global-link, .wm-global-github {
@@ -889,6 +893,11 @@ button, input, textarea, select {
 .wm-global-link:hover, .wm-global-github:hover {
     background: #eef4ff;
     color: var(--accent)
+}
+
+.wm-global-version:hover {
+    color: var(--accent);
+    text-decoration: underline
 }
 
 .wm-global-github__icon {

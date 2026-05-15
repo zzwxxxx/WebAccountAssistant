@@ -1655,8 +1655,11 @@ function mn() {
                     })
                 }), e.jsxs("div", {
                     className: "wm-global-footer",
-                    children: [e.jsx("span", {
+                    children: [e.jsx("button", {
                         className: "wm-global-version",
+                        type: "button",
+                        title: "安装教程",
+                        onClick: () => chrome.tabs.create({url: chrome.runtime.getURL("install.html")}),
                         children: WAAgetVersion()
                     }), e.jsx("button", {
                         className: "wm-global-link",
