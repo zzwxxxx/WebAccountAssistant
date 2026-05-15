@@ -1,0 +1,69 @@
+name: Release Chrome Extension
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+
+      - name: Prepare release variables
+        id: vars
+        shell: bash
+        run: |
+          tag_name="${GITHUB_REF_NAME}"
+          package_name="WebAccountAssistant-${tag_name}.zip"
+
+          echo "tag_name=${tag_name}" >> "${GITHUB_OUTPUT}"
+          echo "package_name=${package_name}" >> "${GITHUB_OUTPUT}"
+
+      - name: Build extension package
+        shell: bash
+        run: |
+          mkdir -p dist
+
+          zip -r "dist/${{ steps.vars.outputs.package_name }}" \
+            manifest.json \
+            background.js \
+            content.js \
+            page-guard.js \
+            popup.html \
+            extension.html \
+            auth.html \
+            assets \
+            icons \
+            README.md \
+            ChangeLog.md \
+            LICENSE
+
+      - name: Verify package
+        shell: bash
+        run: |
+          unzip -p "dist/${{ steps.vars.outputs.package_name }}" manifest.json > /dev/null
+          unzip -l "dist/${{ steps.vars.outputs.package_name }}"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          tag_name="${{ steps.vars.outputs.tag_name }}"
+          package_path="dist/${{ steps.vars.outputs.package_name }}"
+
+          if gh release view "${tag_name}" > /dev/null 2>&1; then
+            gh release upload "${tag_name}" "${package_path}" --clobber
+          else
+            gh release create "${tag_name}" "${package_path}" \
+              --title "${tag_name}" \
+              --notes "Chrome extension release package: ${{ steps.vars.outputs.package_name }}"
+          fi
