@@ -68,7 +68,12 @@ function g(s) {
 }
 
 function q(s, t) {
-    return s.fields.filter(r => !r.sensitive && !/password|passwd|pass|pwd|密码|口令/i.test(`${r.key ?? ""} ${r.label ?? ""}`)).map(r => t.values[r.key] ?? "").filter(Boolean).join("｜") || "未填写非敏感字段"
+    const a = s.fields.filter(r => !r.sensitive && !/password|passwd|pass|pwd|密码|口令/i.test(`${r.key ?? ""} ${r.label ?? ""}`)).map(r => t.values[r.key] ?? "").filter(Boolean).map(r => String(r));
+    return a.length ? a : ["未填写非敏感字段"]
+}
+
+function H(s) {
+    return s.join("｜")
 }
 
 function B(s, t) {
@@ -341,15 +346,32 @@ function F() {
                     children: [n.env.accounts.length === 0 ? e.jsx("div", {
                         className: "wm-popup__empty",
                         children: "暂无账号"
-                    }) : null, n.env.accounts.map(l => e.jsx("div", {
-                        className: "wm-popup__account-row",
-                        children: e.jsx("button", {
-                            className: "wm-popup__account",
-                            type: "button",
-                            onClick: () => void v(l),
-                            children: q(n, l)
-                        })
-                    }, l.id))]
+                    }) : null, n.env.accounts.map(l => {
+                        const i = q(n, l), S = H(i);
+                        return e.jsx("div", {
+                            className: "wm-popup__account-row",
+                            children: e.jsxs("button", {
+                                className: "wm-popup__account",
+                                type: "button",
+                                title: S,
+                                onClick: () => void v(l),
+                                children: [e.jsx("span", {
+                                    className: "wm-popup__account-summary",
+                                    style: {gridTemplateColumns: `repeat(${i.length}, minmax(0, 1fr))`},
+                                    children: i.map((T, W) => e.jsxs("span", {
+                                        className: "wm-popup__account-part",
+                                        children: [W > 0 ? e.jsx("span", {
+                                            className: "wm-popup__account-sep",
+                                            children: "｜"
+                                        }) : null, e.jsx("span", {
+                                            className: "wm-popup__account-text",
+                                            children: T
+                                        })]
+                                    }, `${W}-${T}`))
+                                }), e.jsx("span", {className: "wm-popup__account-tooltip", children: S})]
+                            })
+                        }, l.id)
+                    })]
                 }) : null]
             }), e.jsx("button", {
                 className: "wm-popup__item",
