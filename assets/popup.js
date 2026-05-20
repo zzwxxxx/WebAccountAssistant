@@ -76,6 +76,29 @@ function H(s) {
     return s.join("｜")
 }
 
+function J(s) {
+    const t = s?.message ?? String(s ?? "");
+    return /No tab with id|Receiving end does not exist|Could not establish connection/i.test(t)
+}
+
+async function X(s) {
+    try {
+        return await chrome.tabs.get(s)
+    } catch (t) {
+        if (J(t)) return null;
+        throw t
+    }
+}
+
+async function Y(s, t) {
+    try {
+        return await chrome.tabs.sendMessage(s, t)
+    } catch (a) {
+        if (J(a)) return {ok: !1, error: "当前标签页已刷新或关闭，请重新打开插件后再试"};
+        throw a
+    }
+}
+
 function B(s, t) {
     var o;
     const a = {};
@@ -242,12 +265,16 @@ function F() {
         account: null
     });
     f.useEffect(() => {
-        R().then(t), chrome.tabs.query({active: !0, currentWindow: !0}, async l => {
-            const i = l[0] ?? null;
-            if (r(i), !(i != null && i.url) || !/^https?:/.test(i.url)) return;
-            const S = await $();
-            c(S), d(b(S, g(i.url)))
-        })
+        R().then(t), (async () => {
+            try {
+                const l = await chrome.tabs.query({active: !0, currentWindow: !0}), i = l[0] ?? null;
+                if (r(i), !(i != null && i.url) || !/^https?:/.test(i.url)) return;
+                const S = await $();
+                c(S), d(b(S, g(i.url)))
+            } catch (l) {
+                x(J(l) ? "当前标签页不可用，请刷新页面后重试" : l.message ?? "读取当前标签页失败")
+            }
+        })()
     }, []), f.useEffect(() => {
         const l = (i, S) => {
             S === "local" && i[N] && t(i[N].newValue !== !1)
@@ -282,9 +309,14 @@ function F() {
         if (a != null && a.id) {
             x("");
             try {
-                const i = await chrome.tabs.sendMessage(a.id, {type: "WAA_FILL_ACCOUNT", accountId: l.id});
-                if (!(i != null && i.ok)) {
-                    x((i == null ? void 0 : i.error) ?? "填充失败");
+                const i = await X(a.id);
+                if (!i) {
+                    x("当前标签页已关闭或不可用，请重新打开插件后再试");
+                    return
+                }
+                const S = await Y(a.id, {type: "WAA_FILL_ACCOUNT", accountId: l.id});
+                if (!(S != null && S.ok)) {
+                    x((S == null ? void 0 : S.error) ?? "填充失败");
                     return
                 }
                 window.close()

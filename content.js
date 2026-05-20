@@ -7709,6 +7709,18 @@ select {
                 f(I.id), c("")
             }).catch(O => c(O.message))
         }, [e, n]), (0, Y.useEffect)(() => {
+            if (!e) return;
+            let E = () => {
+                let N = xu(e);
+                r(N), N || (f(null), c(""), k({
+                    open: !1,
+                    account: null
+                }), a.current = "")
+            }, N = window.setInterval(E, 300);
+            return window.addEventListener("popstate", E), window.addEventListener("hashchange", E), E(), () => {
+                window.clearInterval(N), window.removeEventListener("popstate", E), window.removeEventListener("hashchange", E)
+            }
+        }, [e]), (0, Y.useEffect)(() => {
             let E = (N, I, O) => {
                 if (N?.type !== "WAA_FILL_ACCOUNT") return !1;
                 if (!n) return O({ok: !1, error: "\u672A\u8BC6\u522B\u6B64\u9875\u9762"}), !1;

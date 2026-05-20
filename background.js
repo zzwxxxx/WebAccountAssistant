@@ -63,6 +63,11 @@ function parseUrl(url) {
     }
 }
 
+function isStaleTabError(error) {
+    const message = error?.message ?? String(error ?? "");
+    return /No tab with id/i.test(message);
+}
+
 function matchEnvironment(config, urlInfo) {
     if (!config || !urlInfo) return null;
     const host = normalizeHost(urlInfo.host || urlInfo.hostname);
@@ -348,10 +353,14 @@ chrome.windows?.onRemoved?.addListener((windowId) => {
 
 async function setToolbarIcon(tabId, matched) {
     if (!chrome.action?.setIcon || !tabId) return;
-    await chrome.action.setIcon({
-        tabId,
-        path: matched ? ACTIVE_ICON : INACTIVE_ICON
-    });
+    try {
+        await chrome.action.setIcon({
+            tabId,
+            path: matched ? ACTIVE_ICON : INACTIVE_ICON
+        });
+    } catch (error) {
+        if (!isStaleTabError(error)) throw error;
+    }
 }
 
 async function updateTabIcon(tab) {
@@ -377,7 +386,9 @@ chrome.runtime.onStartup?.addListener(() => {
 });
 
 chrome.tabs.onActivated?.addListener(({tabId}) => {
-    chrome.tabs.get(tabId).then(updateTabIcon).catch(console.error);
+    chrome.tabs.get(tabId).then(updateTabIcon).catch((error) => {
+        if (!isStaleTabError(error)) console.error(error);
+    });
 });
 
 chrome.tabs.onUpdated?.addListener((tabId, changeInfo, tab) => {
